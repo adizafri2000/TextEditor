@@ -1,23 +1,14 @@
-eometry("400x400")
-
-#MENU BAR
-def saveNewFile():
-    SAVEFOLDER = 'text_files'
-    if not os.path.exists(SAVEFOLDER):
-        os.makedirs(SAVEFOLDER)
-    '''
-    nameWindow = Toplevel(root)
-    label = Label(nameWindow,text="Enter file name for this .txt file: ")
-    label.pack(fill=X,side=TOP)
-    answer = Entry(nameWindow)
-    answer.pack()
-    nameButton = Button(nameWindow,text="Save")
-    nameButton.pack()
-    '''
-    fileName = SAVEFOLDER + "\\test.txt"
-    #global text
+eName = SAVEFOLDER + "\\test.txt"
+    savelocation = tkinter.filedialog.asksaveasfilename()
     file1=open(fileName, "w+")
     file1.write(text.get("1.0", "end-1c"))
     file1.close()
 
 def donothing():
+    filewin = Toplevel(root)
+    button = Button(filewin, text="Do nothing button")
+    button.pack()
+
+menubar = Menu(root)
+filemenu = Menu(menubar, tearoff=0)
+filemenu.add_command(label="New", command=donothing)
