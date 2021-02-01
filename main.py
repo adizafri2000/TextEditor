@@ -11,22 +11,45 @@ from tkinter.filedialog import *
 root = Tk()
 root.title("Text Editor")
 root.geometry("400x400")
+currentFile = " "
 
 #MENU BAR
+def createFile():
+    clearText()
+    renameFileNameLabel("Untitled")
+    filemenu.entryconfigure(2,state=DISABLED)
+
 def saveNewFile():
     savelocation = tkinter.filedialog.asksaveasfilename(title = "Select file",filetypes = (("text file","*.txt"),("all files","*.*")))
     if ".txt" not in savelocation:
         savelocation+=".txt"
-    file1=open(savelocation, "w+")
+    file1 = open(savelocation, "w+")
     file1.write(text.get("1.0", "end-1c"))
     file1.close()
+    renameFileNameLabel(os.path.basename(os.path.basename(savelocation)))
+    filemenu.entryconfigure(2,state=ACTIVE)
+    currentFile = savelocation
+    print("saveNewFile()")
+    print("Directory:",savelocation)
+    os.chdir(currentFile)
 
 def openFile():
     selectedFile = tkinter.filedialog.askopenfilename(title = "Select file",filetypes = ((".txt files","*.txt"),("all files","*.*")))
     selectedFile = open(selectedFile,"r")
-    fileNameLabel.configure(text=os.path.basename(selectedFile.name))
+    renameFileNameLabel(os.path.basename(selectedFile.name))
     clearText()
     text.insert(END,selectedFile.read())
+    filemenu.entryconfigure(2,state=ACTIVE)
+    print("openFile()")
+    os.chdir(r'{}'.format(os.path.dirname(selectedFile.name)))
+    print("CURRENT WORK DIRECTORY IS",os.getcwd())
+    currentFile = os.getcwd()+"\\"+os.path.basename(selectedFile.name)
+    print("FULL LOCATION OF FILE AND NAME:",currentFile)
+
+def saveFile():
+    file1 = open(currentFile, "w+")
+    file1.write(text.get("1.0", "end-1c"))
+    file1.close()
 
 def clearText():
     text.delete(1.0,END)
@@ -38,9 +61,9 @@ def donothing():
 
 menubar = Menu(root)
 filemenu = Menu(menubar, tearoff=0)
-filemenu.add_command(label="New", command=donothing)
+filemenu.add_command(label="New", command=createFile)
 filemenu.add_command(label="Open", command=openFile)
-filemenu.add_command(label="Save", command=donothing)
+filemenu.add_command(label="Save", command=saveFile, state=DISABLED)
 filemenu.add_command(label="Save as...", command=saveNewFile)
 filemenu.add_command(label="Close", command=donothing)
 
@@ -69,8 +92,11 @@ menubar.add_cascade(label="Help", menu=helpmenu)
 root.config(menu=menubar)
 
 #INDIVIDUAL .TXT FILE NAME LABEL
-fileNameLabel = Label(root,text="Untitled")
-fileNameLabel.pack(side=TOP)
+fileNameLabel = Label(root,text="Untitled",background="white")
+fileNameLabel.pack(side=TOP,fill=X)
+
+def renameFileNameLabel(val):
+    fileNameLabel.configure(text=val)
 
 #HORIZONTAL AND VERTICAL SCROLLBARS
 vScrollbar = Scrollbar(root)
