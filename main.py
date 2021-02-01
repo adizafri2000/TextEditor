@@ -1,4 +1,6 @@
 from tkinter import *
+import tkinter.filedialog
+from tkinter.filedialog import askopenfilename
 import os
 
 #TO-DO LIST
@@ -11,12 +13,24 @@ root.title("Text Editor")
 root.geometry("400x400")
 
 #MENU BAR
-def saveFile():
-    if not os.path.exists('text_files'):
-        os.makedirs('text_files')
-    filewin = Toplevel(root)
-    button = Button(filewin, text="Do nothing button")
-    button.pack()
+def saveNewFile():
+    SAVEFOLDER = 'text_files'
+    if not os.path.exists(SAVEFOLDER):
+        os.makedirs(SAVEFOLDER)
+    '''
+    nameWindow = Toplevel(root)
+    label = Label(nameWindow,text="Enter file name for this .txt file: ")
+    label.pack(fill=X,side=TOP)
+    answer = Entry(nameWindow)
+    answer.pack()
+    nameButton = Button(nameWindow,text="Save")
+    nameButton.pack()
+    '''
+    fileName = SAVEFOLDER + "\\test.txt"
+    #global text
+    file1=open(fileName, "w+")
+    file1.write(text.get("1.0", "end-1c"))
+    file1.close()
 
 def donothing():
     filewin = Toplevel(root)
@@ -27,8 +41,8 @@ menubar = Menu(root)
 filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label="New", command=donothing)
 filemenu.add_command(label="Open", command=donothing)
-filemenu.add_command(label="Save", command=saveFile)
-filemenu.add_command(label="Save as...", command=donothing)
+filemenu.add_command(label="Save", command=donothing)
+filemenu.add_command(label="Save as...", command=saveNewFile)
 filemenu.add_command(label="Close", command=donothing)
 
 filemenu.add_separator()
@@ -53,6 +67,7 @@ helpmenu.add_command(label="About...", command=donothing)
 menubar.add_cascade(label="Help", menu=helpmenu)
 
 root.config(menu=menubar)
+
 
 #HORIZONTAL AND VERTICAL SCROLLBARS
 vScrollbar = Scrollbar(root)
