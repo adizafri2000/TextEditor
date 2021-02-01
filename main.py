@@ -1,7 +1,7 @@
+import os
 from tkinter import *
 import tkinter.filedialog
-from tkinter.filedialog import askopenfilename
-import os
+from tkinter.filedialog import *
 
 #TO-DO LIST
 #1. CAN WRITE/EDIT TEXT
@@ -24,7 +24,12 @@ def saveNewFile():
 def openFile():
     selectedFile = tkinter.filedialog.askopenfilename(title = "Select file",filetypes = ((".txt files","*.txt"),("all files","*.*")))
     selectedFile = open(selectedFile,"r")
-    print(selectedFile.read())
+    fileNameLabel.configure(text=os.path.basename(selectedFile.name))
+    clearText()
+    text.insert(END,selectedFile.read())
+
+def clearText():
+    text.delete(1.0,END)
 
 def donothing():
     filewin = Toplevel(root)
@@ -53,6 +58,7 @@ editmenu.add_command(label="Copy", command=donothing)
 editmenu.add_command(label="Paste", command=donothing)
 editmenu.add_command(label="Delete", command=donothing)
 editmenu.add_command(label="Select All", command=donothing)
+editmenu.add_command(label="Clear", command=clearText)
 
 menubar.add_cascade(label="Edit", menu=editmenu)
 helpmenu = Menu(menubar, tearoff=0)
@@ -62,12 +68,16 @@ menubar.add_cascade(label="Help", menu=helpmenu)
 
 root.config(menu=menubar)
 
+#INDIVIDUAL .TXT FILE NAME LABEL
+fileNameLabel = Label(root,text="Untitled")
+fileNameLabel.pack(side=TOP)
 
 #HORIZONTAL AND VERTICAL SCROLLBARS
 vScrollbar = Scrollbar(root)
 vScrollbar.pack(side=RIGHT,fill=Y)
 hScrollbar = Scrollbar(root,orient=HORIZONTAL)
 hScrollbar.pack(side=BOTTOM,fill=X)
+
 
 #TEXT WIDGET TO ALLOW TEXT INPUTS AND EDITS
 #NOTES
