@@ -6,11 +6,17 @@ Python 3.9 is used for development. Notepad++ and Visual Studio Code are taken a
 
 ***Current features (2/2/2021)***
 1. Supported file
+
   * Only .txt files are currently supported
+  
 2. Features
+
   * Save a new .txt file
+  
   * Open existing .txt file
+  
   * Save currently opened .txt file
+  
 
 To be added in future progresses:
 * Search for identical word(s)
