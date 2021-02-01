@@ -20,6 +20,7 @@ def createFile():
     filemenu.entryconfigure(2,state=DISABLED)
 
 def saveNewFile():
+    global currentFile
     savelocation = tkinter.filedialog.asksaveasfilename(title = "Select file",filetypes = (("text file","*.txt"),("all files","*.*")))
     if ".txt" not in savelocation:
         savelocation+=".txt"
@@ -29,22 +30,18 @@ def saveNewFile():
     renameFileNameLabel(os.path.basename(os.path.basename(savelocation)))
     filemenu.entryconfigure(2,state=ACTIVE)
     currentFile = savelocation
-    print("saveNewFile()")
-    print("Directory:",savelocation)
-    os.chdir(currentFile)
+    os.chdir(r'{}'.format(os.path.dirname(savelocation)))
 
 def openFile():
+    global currentFile
     selectedFile = tkinter.filedialog.askopenfilename(title = "Select file",filetypes = ((".txt files","*.txt"),("all files","*.*")))
     selectedFile = open(selectedFile,"r")
     renameFileNameLabel(os.path.basename(selectedFile.name))
     clearText()
     text.insert(END,selectedFile.read())
     filemenu.entryconfigure(2,state=ACTIVE)
-    print("openFile()")
     os.chdir(r'{}'.format(os.path.dirname(selectedFile.name)))
-    print("CURRENT WORK DIRECTORY IS",os.getcwd())
     currentFile = os.getcwd()+"\\"+os.path.basename(selectedFile.name)
-    print("FULL LOCATION OF FILE AND NAME:",currentFile)
 
 def saveFile():
     file1 = open(currentFile, "w+")
